@@ -1,45 +1,41 @@
 {
-  "name": "leaflet-graphicscale",
+  "name": "@kalisio/leaflet-graphicscale",
   "version": "0.0.4",
-  "description": "A graphic scale for Leaflet.js that looks sharp",
+  "description": "A more configurable graphic scale for Leaflet.js",
   "main": "./src/Leaflet.GraphicScale.js",
   "scripts": {
-    "test": "mocha",
     "build:js": "uglifyjs src/Leaflet.GraphicScale.js > dist/Leaflet.GraphicScale.min.js",
     "build:css": "sass --style compressed src/Leaflet.GraphicScale.scss > dist/Leaflet.GraphicScale.min.css",
     "build": "npm run build:css && npm run build:js",
-    "dev:livereload": "live-reload --port 9991 ./demo ./dist",
-    "dev:watch": "onchange 'src/**/*.*' -- npm run build",
-    "dev:serve": "http-server -p 9990 .",
-    "dev": "npm run build && parallelshell 'npm run dev:livereload -s' 'npm run dev:serve -s' 'npm run dev:watch -s'"
+    "dev": "onchange 'src/**/*.*' -- npm run build",
+    "publish": "git push origin HEAD --tags && git push origin",
+    "release:patch": "npm version patch && npm publish --access public",
+    "release:minor": "npm version minor && npm publish --access public",
+    "release:major": "npm version major && npm publish --access public"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/nerik/leaflet-graphicscale.git"
+    "url": "https://github.com/kalisio/leaflet-graphicscale.git"
   },
   "keywords": [
     "graphicscale",
     "leaflet",
-    "scale",
-    "kilometers",
-    "km"
+    "scale"
   ],
   "author": "Erik Escoffier <erik.escoffier@gmail.com> (https://github.com/nerik/)",
-  "license": "unlicense",
+  "contributors": [{
+      "name": "Kalisio",
+      "email": "contact@kalisio.com",
+      "url": "https://github.com/kalisio"
+  }],
+  "license": "public domain",
   "bugs": {
-    "url": "https://github.com/nerik/leaflet-graphicscale/issues"
+    "url": "https://github.com/kalisio/leaflet-graphicscale/issues"
   },
-  "homepage": "https://github.com/nerik/leaflet-graphicscale",
+  "homepage": "https://github.com/kalisio/leaflet-graphicscale",
   "devDependencies": {
-    "chai": "^2.3.0",
-    "http-server": "^0.8.0",
-    "jsdom": "^5.3.0",
-    "leaflet": "^0.7.3",
-    "live-reload": "^1.1.0",
-    "mocha": "^2.2.4",
-    "mocha-jsdom": "^0.3.0",
-    "onchange": "^1.1.0",
-    "parallelshell": "^1.1.1",
-    "uglify-js": "^2.4.20"
-  }
+    "onchange": "^7.1.0",
+    "uglify-js": "^3.17.0"
+  },
+  "dependencies": {}
 }
