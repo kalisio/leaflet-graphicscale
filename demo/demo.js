@@ -5,27 +5,45 @@
         maxZoom: 30
     }).setView([16.252583, -61.539917], 10);
 
-    L.tileLayer('https://{s}.tiles.mapbox.com/v3/{key}/{z}/{x}/{y}.png', {
-        key: 'lrqdo.me2bng9n',
-        attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors | &copy; <a href="http://mapbox.com">Mapbox</a>'
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
     }).addTo(map);
 
-	var graphicScale = L.control.graphicScale({
-		doubleLine: true,
-		fill: 'hollow',
-        showSubunits: true
-	}).addTo(map);
-
-    var scaleText = L.DomUtil.create('div', 'scaleText' );
-    graphicScale._container.insertBefore(scaleText, graphicScale._container.firstChild);
-    scaleText.innerHTML = '<h1>Leaflet Graphic Scale</h1><p>style: <span class="choice">hollow</span>-<span class="choice">line</span>-<span class="choice">fill</span>-<span class="choice">nofill</span></p>';
-
-    var styleChoices = scaleText.querySelectorAll('.choice');
-
-    for (var i = 0; i < styleChoices.length; i++) {
-        styleChoices[i].addEventListener('click', function(e) {
-            graphicScale._setStyle( { fill: e.currentTarget.innerHTML } );
-        });
+    var options = {
+        doubleLine: true,
+        showSubunits: true,
+        fill: 'hollow',
+        unitPlacement: 'scale'
+    };
+    var graphicScale;
+    function createOptions(html, property) {
+        var element = L.DomUtil.create('div', 'scaleText' );
+        graphicScale._container.insertBefore(element, graphicScale._container.lastChild);
+        element.innerHTML = html;
+        var choices = element.querySelectorAll('.choice');
+        for (var i = 0; i < choices.length; i++) {
+            choices[i].addEventListener('click', function(e) {
+                graphicScale.remove();
+                var value = e.currentTarget.innerHTML;
+                if (value === 'true') value = true;
+                if (value === 'false') value = false;
+                options[property] = value;
+                createControl();
+            });
+        }
     }
+    function createControl() {
+        graphicScale = L.control.graphicScale(options).addTo(map);
+        var doubleLineOptions = '<h1>Leaflet Graphic Scale</h1><b>doubleLine</b>: <span class="choice">true</span>-<span class="choice">false</span>';
+        createOptions(doubleLineOptions, 'doubleLine');
+        var showSubunitsOptions = '<b>showSubunits</b>: <span class="choice">true</span>-<span class="choice">false</span>';
+        createOptions(showSubunitsOptions, 'showSubunits');
+        var unitPlacementOptions = '<b>unitPlacement</b>: <span class="choice">label</span>-<span class="choice">scale</span>';
+        createOptions(unitPlacementOptions, 'unitPlacement');
+        var fillOptions = '<b>fill</b>: <span class="choice">hollow</span>-<span class="choice">line</span>-<span class="choice">fill</span>-<span class="choice">double</span>-<span class="choice">nofill</span><br/><br/>';
+        createOptions(fillOptions, 'fill');
+    };
 
+    createControl();
 })();

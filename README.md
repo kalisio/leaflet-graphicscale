@@ -1,31 +1,17 @@
-# DEPRECATED 
-
-![No Maintenance Intended](https://img.shields.io/maintenance/no/2016.svg)
-
---- 
-
 # leaflet-graphicscale
-A animated graphic scale for Leaflet.js that looks sharp.
+
+A more configurable graphic scale for Leaflet.js.
 
 [![Image](http://nerik.github.io/leaflet-graphicscale/readme/demo.png)][1]
 
-Demo : http://nerik.github.io/leaflet-graphicscale/demo/
+Forked from [nerik/leaflet-graphicscale](https://github.com/nerik/leaflet-graphicscale) as no maintenance was intended.
 
-## Why ?
-Because scale is an important component of a map, and it is often overlooked. Leaflet does have a default scale component (http://leafletjs.com/reference.html#control-scale), but honestly it's kind of boring.
+## Build
 
-This plugin provides a more interesting alternative with more customizability.
-
-## Contributing
-
-Yes, please. I haven't had the time to make proper tests but they would be much needed.
-Also I've heard that there are some parts on the globe where they don't use the metric system, so if you'd like to add your measurement system be my guest (furlongs, wiffles, smoots, miles... http://en.wikipedia.org/wiki/List_of_humorous_units_of_measurement)
-
-To run the demo locally (you'll need ```sass```): 
+To build distribution files locally you'll need to install [sass](https://www.npmjs.com/package/sass) globally then run: 
 ```
-npm run dev
+npm run build
 ```
-
 
 ## Getting started
 
@@ -36,13 +22,13 @@ npm run dev
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" />
     <link rel="stylesheet" href="Leaflet.GraphicScale.min.css" />
 </head>
 <body>
     <div id="map"></div>
-    <script src="vendor/leaflet.js"></script>
-    <script src="../dist/Leaflet.GraphicScale.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
+    <script src="Leaflet.GraphicScale.min.js"></script>
     <script>
         var map = L.map('map');
         L.tileLayer('...').addTo(map);
@@ -57,7 +43,7 @@ See below for ```[options]```
 ### Compile from source (using browserify and sass)
 
 ```
-npm install -S leaflet-graphicscale
+npm install -S @kalisio/leaflet-graphicscale
 ```
 
 SASS : 
@@ -71,14 +57,11 @@ require('leaflet-graphicscale');
 var graphicScale = L.control.graphicScale().addTo(map);
 ```
 
-
-
-
 ## Options
 
 ### fill: ```false|'fill'|'hollow'|'line'```
 
-Default: false
+Default: `false`.
 
 - false/'nofill'
 
@@ -86,7 +69,13 @@ Default: false
 
 - 'fill'
 
+With `fill` the scale alternates between filled and transparent sections.
+
 ![](http://nerik.github.io/leaflet-graphicscale/readme/fill.png)
+
+- 'double'
+
+With `double` the scale only contains filled sections but with alternate colors.
 
 - 'hollow'
 
@@ -99,29 +88,40 @@ Default: false
 
 ### doubleLine: ```false|true```
 
-Default: false
+Default: `false`.
 
 ![](http://nerik.github.io/leaflet-graphicscale/readme/double.png)
 
 
 ### showSubunits: ```false|true```
 
-Default: false. Show smaller divisions on the left of the zero.
+Default: `false`. Show smaller divisions on the left of the zero.
 
 ![](http://nerik.github.io/leaflet-graphicscale/readme/sub.png)
 
 
 ### minUnitWidth: ```(Number)```
 
-Default: 30. The minimum width of a scale unit.
+Default: `30`. The minimum width of a scale unit.
 
 ### maxUnitsWidth: ```(Number)```
 
-Default: 240. The maximum width of the scale without subunits.
+Default: `240`. The maximum width of the scale without subunits.
 
 ### labelPlacement: ```'auto'|'top'|'bottom'``` 
 
-Default: auto. Display the distance label on top/on the bottom of the scale bar. If set to auto, labels will be placed on top when the scale control is on the bottom of the map, and on the bottom when the scale control is on the top of the map (```position``` parameter)
+Default: `auto`. Display the distance label on top/on the bottom of the scale bar. If set to auto, labels will be placed on top when the scale control is on the bottom of the map, and on the bottom when the scale control is on the top of the map (```position``` parameter).
+
+### unitPlacement: ```'label'|'scale'``` 
+
+Default: `label`. Display the unit labels beside the labels on the left/right side of the scale bar. If set to `scale`, labels will be placed on the left/right-side of the scale bar.
+
+### getDisplayUnit ```(Function)```
+
+Default: none. The `getDisplayUnit(meters)` function should return the unit label and value to be displayed, e.g.
+```
+const getDisplayUnit = (meters) => ({ unit: (meters<1000) ? 'm' : 'km', amount: (displayUnit === 'km') ? meters / 1000 : meters })
+```
 
 ### position:
 
@@ -131,8 +131,3 @@ See http://leafletjs.com/reference.html#control
 
 See http://leafletjs.com/reference.html#control-scale
 
-
-
-
-
-[1]: http://nerik.github.io/leaflet-graphicscale/demo/

@@ -30,6 +30,11 @@ body {
     margin-bottom: 4px;
 }
 
+.leaflet-control-graphicscale .unitLabel {
+    top: -10px;
+    margin-right: -65px;
+}
+
 .leaflet-control-graphicscale .line {
     border-color: rgb(107, 55, 32);
 }
@@ -38,8 +43,12 @@ body {
     background-color: rgb(107, 55, 32);
 }
 
+.leaflet-control-graphicscale .filled .secondary-fill {
+    background-color: rgb(200, 200, 200);
+}
+
 .scaleText {
-    margin-bottom: 35px;
+    margin-bottom: 5px;
     text-align: center;
 }
 

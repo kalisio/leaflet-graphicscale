@@ -7,7 +7,8 @@ L.Control.GraphicScale = L.Control.extend({
         fill: false,
         showSubunits: false,
         doubleLine: false,
-        labelPlacement: 'auto' 
+        labelPlacement: 'auto',
+        unitPlacement: 'label'
     },
 
     onAdd: function (map) {
@@ -106,8 +107,10 @@ L.Control.GraphicScale = L.Control.extend({
             var subunit = this._buildDivision( i%2 === 1 );
             subunits.appendChild(subunit);
             this._subunits.unshift(subunit);
-
         }
+
+        this._unitLbl = L.DomUtil.create('div', 'label unitLabel');
+        // Will be attached to the first/latest visible division when updating
 
         this._zeroLbl = L.DomUtil.create('div', 'label zeroLabel');
         this._zeroLbl.innerHTML = '0';
@@ -128,9 +131,19 @@ L.Control.GraphicScale = L.Control.extend({
 
         var l2 = L.DomUtil.create('div', 'line2');
         item.appendChild( l2 );
-
-        if (fill)  l1.appendChild( L.DomUtil.create('div', 'fill') );
-        if (!fill) l2.appendChild( L.DomUtil.create('div', 'fill') );
+        // Do we fill all with alternate colors or do we alternate fill ?
+        if (this.options.fill === 'double') {
+            if (fill)  {
+                l1.appendChild( L.DomUtil.create('div', 'fill') );
+                l2.appendChild( L.DomUtil.create('div', 'secondary-fill') );
+            } else {
+                l1.appendChild( L.DomUtil.create('div', 'secondary-fill') );
+                l2.appendChild( L.DomUtil.create('div', 'fill') );
+            }
+        } else {
+            if (fill)  l1.appendChild( L.DomUtil.create('div', 'fill') );
+            if (!fill) l2.appendChild( L.DomUtil.create('div', 'fill') );
+        }
 
         return item;
     },
@@ -299,7 +312,22 @@ L.Control.GraphicScale = L.Control.extend({
         this._renderPart(scale.subunits.subunit.subunitPx, scale.subunits.subunit.subunitMeters, scale.subunits.numSubunits, this._subunits);
 
         var subunitsDisplayUnit = this._getDisplayUnit(scale.subunits.total);
-        this._subunitsLbl.innerHTML = ''+ subunitsDisplayUnit.amount + subunitsDisplayUnit.unit;
+        if (this.options.unitPlacement === 'label') {
+            this._subunitsLbl.innerHTML = ''+ subunitsDisplayUnit.amount + subunitsDisplayUnit.unit;
+        } else {
+            this._subunitsLbl.innerHTML = ''+ subunitsDisplayUnit.amount;
+        }
+
+        if (this.options.unitPlacement === 'scale') {
+            var unitsDisplayUnit = this._getDisplayUnit(scale.unit.unitMeters);
+            this._unitLbl.innerHTML = unitsDisplayUnit.unit;
+            // Detach from previous latest division then reattach
+            if (this._unitLblParent !== this._units[scale.numUnits-1]) {
+                if (this._unitLblParent) this._unitLblParent.removeChild(this._unitLbl);
+                this._unitLblParent = this._units[scale.numUnits-1];
+                this._unitLblParent.appendChild(this._unitLbl);
+            }
+        }
     },
 
     _renderPart: function(px, meters, num, divisions, divisionsLbls) {
@@ -326,7 +354,9 @@ L.Control.GraphicScale = L.Control.extend({
                 var lblText = ( (i+1)*displayUnit.amount );
 
                 if (i === num-1) {
-                    lblText += displayUnit.unit;
+                    if (this.options.unitPlacement === 'label') {
+                        lblText += displayUnit.unit;
+                    }
                     lblClassNames.push('labelLast');
                 } else {
                     lblClassNames.push('labelSub');
@@ -340,6 +370,8 @@ L.Control.GraphicScale = L.Control.extend({
     },
 
     _getDisplayUnit: function(meters) {
+        // User-defined ?
+        if (this.options.getDisplayUnit) return this.options.getDisplayUnit(meters);
         var displayUnit = (meters<1000) ? 'm' : 'km';
         return {
             unit: displayUnit,

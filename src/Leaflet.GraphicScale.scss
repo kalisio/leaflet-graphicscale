@@ -9,6 +9,7 @@
 $lineHeight: 6px;
 $borderWidth: 1px;
 $color: #000;
+$secondaryColor: #FFF;
 $fillLineHeight: 2px;
 $fillHollowPadding: 1px;
 
@@ -48,6 +49,12 @@ $fillHollowPadding: 1px;
 	.divisionLabel {
 	  	right: 0;
 	    margin-right: -50px;
+	}
+
+	.unitLabel {
+		right: 0;
+	    top: -2px;
+		margin-right: -60px;
 	}
 
 	.zeroLabel, .subunitsLabel {
@@ -127,7 +134,14 @@ $fillHollowPadding: 1px;
 			right: 0;
 			bottom: 0;
 		}
-
+		.secondary-fill {
+			background-color: $secondaryColor;
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+		}
 	}
 
 	&.filled-line {
