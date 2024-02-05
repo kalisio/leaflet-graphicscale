@@ -2,7 +2,7 @@
 
 A more configurable graphic scale for Leaflet.js.
 
-[![Image](http://nerik.github.io/leaflet-graphicscale/readme/demo.png)][1]
+![Image](./readme/demo.png)
 
 Forked from [nerik/leaflet-graphicscale](https://github.com/nerik/leaflet-graphicscale) as no maintenance was intended.
 
@@ -65,13 +65,13 @@ Default: `false`.
 
 - false/'nofill'
 
-![](http://nerik.github.io/leaflet-graphicscale/readme/nofill.png)
+![](./readme/nofill.png)
 
 - 'fill'
 
 With `fill` the scale alternates between filled and transparent sections.
 
-![](http://nerik.github.io/leaflet-graphicscale/readme/fill.png)
+![](./readme/fill.png)
 
 - 'double'
 
@@ -79,25 +79,25 @@ With `double` the scale only contains filled sections but with alternate colors.
 
 - 'hollow'
 
-![](http://nerik.github.io/leaflet-graphicscale/readme/hollow.png)
+![](./readme/hollow.png)
 
 - 'line'
 
-![](http://nerik.github.io/leaflet-graphicscale/readme/line.png)
+![](./readme/line.png)
 
 
 ### doubleLine: ```false|true```
 
 Default: `false`.
 
-![](http://nerik.github.io/leaflet-graphicscale/readme/double.png)
+![](./readme/double.png)
 
 
 ### showSubunits: ```false|true```
 
 Default: `false`. Show smaller divisions on the left of the zero.
 
-![](http://nerik.github.io/leaflet-graphicscale/readme/sub.png)
+![](./readme/sub.png)
 
 
 ### minUnitWidth: ```(Number)```
