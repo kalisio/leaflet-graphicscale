@@ -39,7 +39,7 @@
             return 1;
         } else if (options.unitSystem === 'imperial') {
             const miles = meters * 0.00062137;
-            return (miles>=25) ? 0.00062137 : 3.28084;
+            return (miles>=30) ? 0.00062137 : 3.28084;
         } else if (options.unitSystem === 'nautical') {
             const nm = meters * 0.000539957;
             return (nm>=25) ? 0.000539957 : 0.0539957;
