@@ -4,7 +4,10 @@ A more configurable graphic scale for Leaflet.js.
 
 ![Image](./readme/demo.png)
 
-Forked from [nerik/leaflet-graphicscale](https://github.com/nerik/leaflet-graphicscale) as no maintenance was intended.
+Forked from [nerik/leaflet-graphicscale](https://github.com/nerik/leaflet-graphicscale) as no maintenance was intended. Additional features have been developed:
+* new `double` fill option to alternate fill colors,
+* new `unitPlacement` option to display unit beside labels or scale,
+* ability to manage multiple unit systems with customisable functions.
 
 ## Build
 

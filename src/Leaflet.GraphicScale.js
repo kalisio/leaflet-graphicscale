@@ -369,7 +369,6 @@ L.Control.GraphicScale = L.Control.extend({
             }
 
             lbl.className = lblClassNames.join(' ');
-
         }
     },
 

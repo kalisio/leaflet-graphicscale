@@ -4,9 +4,10 @@
   "description": "A more configurable graphic scale for Leaflet.js",
   "main": "./src/Leaflet.GraphicScale.js",
   "scripts": {
+    "demo": "shx cp dist/* demo",
     "build:js": "uglifyjs src/Leaflet.GraphicScale.js > dist/Leaflet.GraphicScale.min.js",
     "build:css": "sass --style compressed src/Leaflet.GraphicScale.scss > dist/Leaflet.GraphicScale.min.css",
-    "build": "npm run build:css && npm run build:js",
+    "build": "npm run build:css && npm run build:js && npm run demo",
     "dev": "onchange 'src/**/*.*' -- npm run build",
     "publish": "git push origin HEAD --tags && git push origin",
     "release:patch": "npm version patch && npm publish --access public",
@@ -37,6 +38,7 @@
   "homepage": "https://github.com/kalisio/leaflet-graphicscale",
   "devDependencies": {
     "onchange": "^7.1.0",
+    "shx": "^0.3.4",
     "uglify-js": "^3.17.0"
   },
   "dependencies": {}
