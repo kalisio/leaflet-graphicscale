@@ -1,5 +1,5 @@
 name: Deploy demo
-on: [push]
+on: push
 env:
   TOKEN_GITHUB: ${{ secrets.TOKEN_GITHUB }}
 
