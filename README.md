@@ -59,7 +59,7 @@ var graphicScale = L.control.graphicScale().addTo(map);
 
 ## Options
 
-### fill: ```false|'fill'|'hollow'|'line'```
+### fill: ```false|'fill'|'double'|'hollow'|'line'```
 
 Default: `false`.
 
@@ -116,12 +116,23 @@ Default: `auto`. Display the distance label on top/on the bottom of the scale ba
 
 Default: `label`. Display the unit labels beside the labels on the left/right side of the scale bar. If set to `scale`, labels will be placed on the left/right-side of the scale bar.
 
+### getUnitConversionFactor ```(Function)```
+
+Default: none. The `getUnitConversionFactor(meters)` function should return the conversion factor between meters and target unit to be displayed, e.g. to manage imperial system and switch between miles/feet
+```
+const getUnitConversionFactor = (meters) => (meters * 0.00062137 >= 25) ? 0.00062137 : 3.28084
+```
+
+> Take a look at the demo to see it in action with three different unit systems: metric, imperial, nautical.
+
 ### getDisplayUnit ```(Function)```
 
-Default: none. The `getDisplayUnit(meters)` function should return the unit label and value to be displayed, e.g.
+Default: none. The `getDisplayUnit(value, factor)` function should return the unit label and value to be displayed, e.g. to manage imperial system and switch between miles/feet
 ```
-const getDisplayUnit = (meters) => ({ unit: (meters<1000) ? 'm' : 'km', amount: (displayUnit === 'km') ? meters / 1000 : meters })
+const getDisplayUnit = (value, factor) => ({ unit: (factor === 3.28084) ? 'ft' : 'mi', amount: value })
 ```
+
+> Take a look at the demo to see it in action with three different unit systems: metric, imperial, nautical.
 
 ### position:
 

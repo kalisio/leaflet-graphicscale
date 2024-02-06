@@ -206,6 +206,7 @@ L.Control.GraphicScale = L.Control.extend({
         var subunit = {};
         subunit.subunitDivision = subdivision.division;
         subunit.subunitMeters = subdivision.division * (scale.unit.unitMeters / scale.unit.unitDivision);
+        subunit.subunitFactor = scale.unit.unitFactor,
         subunit.subunitPx = subdivision.division * (scale.unit.unitPx / scale.unit.unitDivision);
 
         var subunits = {
@@ -279,6 +280,8 @@ L.Control.GraphicScale = L.Control.extend({
     Returns a list of possible units whose widthPx would be < minUnitWidthPx
     **/
     _getPossibleUnits: function(maxMeters, minUnitWidthPx, mapWidthPx) {
+        var factor = this._getUnitConversionFactor(maxMeters);
+        maxMeters *= factor
         var exp = (Math.floor(maxMeters) + '').length;
 
         var unitMetersPow;
@@ -297,6 +300,7 @@ L.Control.GraphicScale = L.Control.extend({
 
                 units.push({
                     unitMeters: unitMeters,
+                    unitFactor: factor,
                     unitPx: unitPx,
                     unitDivision: this._possibleDivisions[j],
                     unitScore: this._possibleDivisionsLen-j });
@@ -308,18 +312,18 @@ L.Control.GraphicScale = L.Control.extend({
     },
 
     _render: function(scale) {
-        this._renderPart(scale.unit.unitPx, scale.unit.unitMeters, scale.numUnits, this._units, this._unitsLbls);
-        this._renderPart(scale.subunits.subunit.subunitPx, scale.subunits.subunit.subunitMeters, scale.subunits.numSubunits, this._subunits);
+        this._renderPart(scale.unit.unitPx, scale.unit.unitMeters, scale.unit.unitFactor, scale.numUnits, this._units, this._unitsLbls);
+        this._renderPart(scale.subunits.subunit.subunitPx, scale.subunits.subunit.subunitMeters, scale.subunits.subunit.subunitFactor, scale.subunits.numSubunits, this._subunits);
 
-        var subunitsDisplayUnit = this._getDisplayUnit(scale.subunits.total);
+        var subunitsDisplayUnit = this._getDisplayUnit(scale.subunits.total, scale.subunits.subunit.subunitFactor);
         if (this.options.unitPlacement === 'label') {
-            this._subunitsLbl.innerHTML = ''+ subunitsDisplayUnit.amount + subunitsDisplayUnit.unit;
+            this._subunitsLbl.innerHTML = ''+ Math.round(subunitsDisplayUnit.amount) + subunitsDisplayUnit.unit;
         } else {
-            this._subunitsLbl.innerHTML = ''+ subunitsDisplayUnit.amount;
+            this._subunitsLbl.innerHTML = ''+ Math.round(subunitsDisplayUnit.amount);
         }
 
         if (this.options.unitPlacement === 'scale') {
-            var unitsDisplayUnit = this._getDisplayUnit(scale.unit.unitMeters);
+            var unitsDisplayUnit = this._getDisplayUnit(scale.unit.unitMeters, scale.unit.unitFactor);
             this._unitLbl.innerHTML = unitsDisplayUnit.unit;
             // Detach from previous latest division then reattach
             if (this._unitLblParent !== this._units[scale.numUnits-1]) {
@@ -330,9 +334,9 @@ L.Control.GraphicScale = L.Control.extend({
         }
     },
 
-    _renderPart: function(px, meters, num, divisions, divisionsLbls) {
+    _renderPart: function(px, meters, factor, num, divisions, divisionsLbls) {
 
-        var displayUnit = this._getDisplayUnit(meters);
+        var displayUnit = this._getDisplayUnit(meters, factor);
 
         for (var i = 0; i < this._units.length; i++) {
             var division = divisions[i];
@@ -351,7 +355,7 @@ L.Control.GraphicScale = L.Control.extend({
             var lblClassNames = ['label', 'divisionLabel'];
 
             if (i < num) {
-                var lblText = ( (i+1)*displayUnit.amount );
+                var lblText = ( Math.round((i+1)*displayUnit.amount) );
 
                 if (i === num-1) {
                     if (this.options.unitPlacement === 'label') {
@@ -369,13 +373,19 @@ L.Control.GraphicScale = L.Control.extend({
         }
     },
 
-    _getDisplayUnit: function(meters) {
+    _getUnitConversionFactor: function(meters) {
         // User-defined ?
-        if (this.options.getDisplayUnit) return this.options.getDisplayUnit(meters);
-        var displayUnit = (meters<1000) ? 'm' : 'km';
+        if (this.options.getDisplayUnit) return this.options.getUnitConversionFactor(meters);
+        return 1;
+    },
+
+    _getDisplayUnit: function(value, factor) {
+        // User-defined ?
+        if (this.options.getDisplayUnit) return this.options.getDisplayUnit(value, factor);
+        var displayUnit = (value<1000) ? 'm' : 'km';
         return {
             unit: displayUnit,
-            amount: (displayUnit === 'km') ? meters / 1000 : meters
+            amount: (displayUnit === 'km') ? value / 1000 : value
         };
     }
 
